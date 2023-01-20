@@ -3,8 +3,14 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const cors = require('cors');
 const axios = require('axios');
+const Razorpay = require('razorpay');
+
 const app = express();
-const port = 8080;
+
+var instance = new Razorpay({
+    key_id: 'rzp_test_q92KbX0ZwFyaN0',
+    key_secret: 'UsklYi4BRYogWcehPPjnBtSu',
+});
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' }));
 
@@ -19,6 +25,38 @@ app.use(function (req, res, next) {
     next();
 });
 
+exports.createOrder = async (req, res, next) => {
+    try {
+        const amount = req.body.amount;
+
+        var options = {
+            amount: amount,
+            currency: "INR",
+        };
+        instance.orders.create(options, function (err, order) {
+            console.log(order);
+            if (err) {
+                res.status(200).json({
+                    status: "error",
+                    error: err,
+
+                })
+            }
+
+            res.status(200).json({
+                status: "success",
+                message: "Order created successfully",
+                order
+            })
+        });
+
+    } catch (error) {
+        res.status(200).json({
+            status: 'error',
+            message: error.message
+        })
+    }
+}
 
 app.get('/getgst/:gst', async (req, res, next) => {
     let gst = req.params.gst;
