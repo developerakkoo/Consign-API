@@ -25,7 +25,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-exports.createOrder = async (req, res, next) => {
+app.post('/order',async (req, res, next) => {
     try {
         const amount = req.body.amount;
 
@@ -56,7 +56,9 @@ exports.createOrder = async (req, res, next) => {
             message: error.message
         })
     }
-}
+} )
+
+
 
 app.get('/getgst/:gst', async (req, res, next) => {
     let gst = req.params.gst;
