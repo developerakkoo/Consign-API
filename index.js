@@ -58,6 +58,33 @@ app.post('/order',async (req, res, next) => {
     }
 } )
 
+app.get("/getotp", async (req,res, next) =>{
+    let otp = req.params.otp;
+    let number = req.params.number;
+
+    var config = {
+        method: 'get',
+        url: `https://sms.k7marketinghub.com/app/smsapi/index.php?key=56391A88208C8A&campaign=14827&routeid=30&type=text&contacts=${number}&senderid=WBMCCE&msg=Dear%20Customer,%20Your%20OTP%20is%20${otp}%20for%20The%20Mind%20Labyrinth.%20Do%20not%20share%20this%20OTP%20to%20anyone%20for%20security%20reasons.%20-App%20Institute&template_id=1707167514169508879`,
+       
+    };
+
+    axios(config)
+        .then(function (response) {
+            res.status(200).json({
+                message: 'OTP API',
+                otp,
+                number,
+            })
+        })
+        .catch(function (error) {
+            console.log(error);
+            res.status(500).json({
+                message: error,
+                data: "Something went wrong!"
+            })
+        });
+
+})
 
 
 app.get('/getgst/:gst', async (req, res, next) => {
