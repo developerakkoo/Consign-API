@@ -72,8 +72,8 @@ app.get("/getotp", async (req,res, next) =>{
         .then(function (response) {
             res.status(200).json({
                 message: 'OTP API',
-                otp,
-                number,
+                otp: otp,
+                number: number,
             })
         })
         .catch(function (error) {
